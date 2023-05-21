@@ -1,4 +1,3 @@
-import { Nav } from "./nav";
 import { LibraryItem, YourLibrary } from "./your-library";
 
 export const App = () => {
@@ -36,6 +35,9 @@ export const App = () => {
   return (
     <>
       <YourLibrary items={items} />
+      <div class="grow rounded-lg mt-2 bg-neutral-900 text-zinc-100 p-4">
+        Hello
+      </div>
     </>
   );
 };
