@@ -1,0 +1,10 @@
+{
+  "name": "music",
+  "version": "1.0.0",
+  "description": "A music app",
+  "scripts": {
+    "dev": "pnpm --parallel --stream -r /^dev:.*/"
+  },
+  "author": "David Welch",
+  "license": "ISC"
+}
