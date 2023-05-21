@@ -1,9 +1,14 @@
 .your-library {
-  @apply h-full bg-zinc-800 fill-zinc-400 text-zinc-400 p-4 flex flex-col;
+  @apply h-full bg-zinc-800 fill-zinc-400 text-zinc-400 flex flex-col;
 }
 .collapsed {
   composes: your-library;
   @apply max-w-fit;
+  .collapse_btn {
+    span {
+      display: hidden;
+    }
+  }
 }
 .expanded {
   composes: your-library;
@@ -14,7 +19,10 @@
   @apply min-w-fit max-w-lg;
 }
 .header {
-  @apply flex pb-4 font-bold text-lg;
+  @apply flex pb-4 pl-1 font-bold text-lg leading-8;
+  button {
+    @apply flex flex-row items-center leading-8 py-1 font-bold text-lg;
+  }
 }
 .header_small {
   composes: header;
@@ -24,5 +32,8 @@
   @apply overflow-y-scroll;
 }
 .collapse_btn {
-  @apply grow text-left px-3;
+  @apply grow text-left;
+  span {
+    @apply px-3;
+  }
 }
