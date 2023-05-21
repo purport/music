@@ -22,8 +22,8 @@ export const YourLibrary = ({ items }: { items: LibraryItem[] }) => {
   };
   return (
     <div class={sizes[size()]}>
-      <div class="bg-neutral-900 flex flex-col text-lg font-bold px-4 pt-3 m-2 rounded-md">
-        <button class="flex h-10">
+      <div class="bg-neutral-900 flex flex-col text-lg font-bold px-4 pt-3 m-2 mb-1 rounded-md">
+        <button class="flex h-10 fill-stone-100 text-stone-100">
           <IconHome />
           <Show when={size() !== "collapsed"}>
             <span class="px-2">Home</span>
@@ -152,7 +152,7 @@ function Row(item: LibraryItem) {
           <PinIcon />
         </span>
       </Show>
-      <span class="text-white">{item.name}</span>
+      <span class="text-stone-100">{item.name}</span>
       <span class="px-1 font-bold">•</span>
       <span class="">{item.type}</span>
     </>
