@@ -8,7 +8,7 @@ export const Player = () => {
         <button class="px-2 hover:fill-stone-100">
           <PreviousIcon />
         </button>
-        <button class="mx-3 px-4 w-8 h-8 fill-zinc-950 hover:bg-white bg-stone-100 rounded-full flex items-center justify-center">
+        <button class="mx-3 px-4 w-8 h-8 fill-zinc-950 hover:bg-white bg-zinc-200 rounded-full flex items-center justify-center">
           <PlayIcon />
         </button>
         <button class="px-2 hover:fill-stone-100">

@@ -14,11 +14,10 @@ export const YourLibrary = ({ items }: { items: LibraryItem[] }) => {
   const [size, setSize] = createSignal<Size>("expanded");
   const sizes = {
     expanded:
-      "h-full bg-zinc-950 fill-zinc-400 text-zinc-400 flex flex-col min-w-fit max-w-xs",
+      "h-full fill-zinc-400 text-zinc-400 flex flex-col min-w-fit max-w-xs",
     enlarged:
-      "h-full bg-zinc-950 fill-zinc-400 text-zinc-400 flex flex-col min-w-fit max-w-lg",
-    collapsed:
-      "h-full bg-zinc-950 fill-zinc-400 text-zinc-400 flex flex-col max-w-fit",
+      "h-full fill-zinc-400 text-zinc-400 flex flex-col min-w-fit max-w-lg",
+    collapsed: "h-full fill-zinc-400 text-zinc-400 flex flex-col max-w-fit",
   };
   return (
     <div class={sizes[size()]}>
