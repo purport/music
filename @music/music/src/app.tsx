@@ -1,4 +1,5 @@
 import { Player } from "./player";
+import { theme } from "./theme";
 import { LibraryItem, YourLibrary } from "./your-library";
 
 export const App = () => {
@@ -34,11 +35,11 @@ export const App = () => {
   ];
 
   return (
-    <div class="h-full flex flex-col items-stretch">
+    <div class={`h-full flex flex-col items-stretch ${theme.body}`}>
       <div class="grow flex">
         <YourLibrary items={items} />
-        <div class="grow rounded-lg mt-2 bg-neutral-900 text-zinc-100 p-4">
-          <h1 class="text-3xl font-bold">Good morning</h1>
+        <div class={`grow rounded-lg mt-2 p-4 ${theme.panel}`}>
+          <h1 class="text-3xl font-bold font-title">Good morning</h1>
         </div>
       </div>
       <div class="grow-0 flex justify-center p-6">

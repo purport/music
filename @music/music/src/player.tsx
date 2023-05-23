@@ -1,29 +1,33 @@
+import { theme } from "./theme";
+
 export const Player = () => {
   return (
-    <div class="fill-zinc-400 text-zinc-400 flex flex-col w-1/4 items-center">
+    <div class={`flex flex-col w-1/4 items-center ${theme.button.default}`}>
       <div class="flex mb-3">
-        <button class="px-2 hover:fill-stone-100">
+        <button class="px-2">
           <ShuffleIcon />
         </button>
-        <button class="px-2 hover:fill-stone-100">
+        <button class="px-2">
           <PreviousIcon />
         </button>
-        <button class="mx-3 px-4 w-8 h-8 fill-zinc-950 hover:bg-white bg-zinc-200 rounded-full flex items-center justify-center">
+        <button
+          class={`mx-3 px-4 w-8 h-8 rounded-full flex items-center justify-center ${theme.button.play}`}
+        >
           <PlayIcon />
         </button>
-        <button class="px-2 hover:fill-stone-100">
+        <button class="px-2">
           <NextIcon />
         </button>
-        <button class="px-2 hover:fill-stone-100">
+        <button class="px-2">
           <RepeatIcon />
         </button>
       </div>
-      <div class="grow flex self-stretch text-sm">
+      <div class={`grow flex self-stretch text-sm ${theme.text.secondary}`}>
         <div class="grow-0">2:25</div>
         <div class="grow px-4 flex items-center">
-          <div class="bg-zinc-600 h-1 grow rounded-sm">
+          <div class={`h-1 grow rounded-sm ${theme.scrubber.background}`}>
             <div
-              class="bg-stone-100 h-1 grow rounded-sm"
+              class={`h-1 grow rounded-sm ${theme.scrubber.foreground}`}
               style="width: 50%"
             ></div>
           </div>

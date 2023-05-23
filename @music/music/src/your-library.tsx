@@ -1,4 +1,5 @@
 import { Match, Show, Switch, createSignal } from "solid-js";
+import { theme } from "./theme";
 
 type Size = "expanded" | "enlarged" | "collapsed";
 
@@ -13,22 +14,22 @@ export interface LibraryItem {
 export const YourLibrary = ({ items }: { items: LibraryItem[] }) => {
   const [size, setSize] = createSignal<Size>("expanded");
   const sizes = {
-    expanded:
-      "h-full fill-zinc-400 text-zinc-400 flex flex-col min-w-fit max-w-xs",
-    enlarged:
-      "h-full fill-zinc-400 text-zinc-400 flex flex-col min-w-fit max-w-lg",
-    collapsed: "h-full fill-zinc-400 text-zinc-400 flex flex-col max-w-fit",
+    expanded: "h-full flex flex-col min-w-fit max-w-xs",
+    enlarged: "h-full flex flex-col min-w-fit max-w-lg",
+    collapsed: "h-full flex flex-col max-w-fit",
   };
   return (
     <div class={sizes[size()]}>
-      <div class="bg-neutral-900 flex flex-col text-lg font-bold px-4 pt-3 m-2 mb-1 rounded-md">
-        <button class="flex h-10 fill-stone-100 text-stone-100">
+      <div
+        class={`flex flex-col text-lg px-4 pt-3 m-2 mb-1 rounded-md ${theme.panel} ${theme.button.default}`}
+      >
+        <button class="flex h-10 font-bold">
           <IconHome />
           <Show when={size() !== "collapsed"}>
             <span class="px-2">Home</span>
           </Show>
         </button>
-        <button class="flex h-10">
+        <button class="flex h-10 font-bold">
           <IconSearch />
           <Show when={size() !== "collapsed"}>
             <span class="px-2">Search</span>
@@ -36,11 +37,16 @@ export const YourLibrary = ({ items }: { items: LibraryItem[] }) => {
         </button>
       </div>
 
-      <div class="flex grow flex-col bg-neutral-900 mt-1 mx-2 rounded-md overflow-y-scroll">
-        <div class="sticky bg-neutral-900 top-0 pt-4">
-          <div class="flex text-lg font-bold h-10 px-4">
+      <div
+        class={`flex grow flex-col mt-1 mx-2 rounded-md overflow-y-scroll ${theme.panel} ${theme.button.default}`}
+      >
+        <div class="sticky top-0 pt-4">
+          <div class="flex text-lg h-10 px-4">
             <Show when={size() !== "collapsed"}>
-              <button class="grow flex" onClick={[setSize, "collapsed"]}>
+              <button
+                class="grow flex font-bold"
+                onClick={[setSize, "collapsed"]}
+              >
                 <LibraryIcon />
                 <span class="grow text-left px-2">Your Library</span>
               </button>
@@ -151,9 +157,9 @@ function Row(item: LibraryItem) {
           <PinIcon />
         </span>
       </Show>
-      <span class="text-stone-100">{item.name}</span>
-      <span class="px-1 font-bold">•</span>
-      <span class="">{item.type}</span>
+      <span class={`${theme.text.default}`}>{item.name}</span>
+      <span class={`px-1 font-bold ${theme.text.secondary}`}>•</span>
+      <span class={`${theme.text.secondary}`}>{item.type}</span>
     </>
   );
 }
