@@ -95,15 +95,13 @@ export const YourLibrary = ({ items }: { items: LibraryItem[] }) => {
 function CollapsedList({ items }: { items: LibraryItem[] }) {
   return (
     <div class="grow flex flex-col space-y-3 overflow-y-scroll">
-      {items.map((item) => (
-        <span class="leading-8">{Box(item)}</span>
+      {items.map((_item) => (
+        <span class="leading-8">
+          <div class="rounded-md w-9 h-9 bg-slate-900"></div>
+        </span>
       ))}
     </div>
   );
-}
-
-function Box(_item: LibraryItem) {
-  return <div class="rounded-md w-9 h-9 bg-red-100"></div>;
 }
 
 function ExpandedList({ items }: { items: LibraryItem[] }) {
