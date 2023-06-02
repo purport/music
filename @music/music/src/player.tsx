@@ -2,7 +2,7 @@ import { theme } from "./theme";
 
 export const Player = () => {
   return (
-    <div class={`flex flex-col w-1/4 items-center ${theme.button.default}`}>
+    <div class={` flex flex-col w-1/4 items-center ${theme.button.default}`}>
       <div class="flex mb-3">
         <button class="px-2">
           <ShuffleIcon />

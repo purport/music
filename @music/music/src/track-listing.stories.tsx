@@ -35,5 +35,5 @@ const tracks: Track[] = [
 ];
 
 export const Default: Story = {
-  render: () => <TrackListing tracks={tracks} />,
+ render: () => <TrackListing tracks={tracks} />,
 };

@@ -126,6 +126,9 @@ export const App = () => {
     <div class={`h-full flex flex-col items-stretch ${theme.body}`}>
       <div class={`flex items-stretch ${theme.body} overflow-y-hidden`}>
         <YourLibrary items={items} />
+        <div>
+          <div>test</div>
+        </div>
         <div
           class={`flex flex-col rounded-lg mt-2 mr-2 z-10 ${theme.panel} relative overflow-y-auto`}
         >

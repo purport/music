@@ -1,0 +1,23 @@
+{
+  "name": "@music/data-etl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "data:schema": "node --loader ts-node/esm src/schema.ts",
+    "data:validate": "node --loader ts-node/esm src/validate.ts",
+    "data:typings": "node --loader ts-node/esm src/typings.ts",
+    "data:transform": "node --loader ts-node/esm src/transform.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "json-schema-to-typescript": "^13.0.1",
+    "jsonschema": "^1.4.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
