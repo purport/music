@@ -2,6 +2,7 @@ import { open } from "node:fs/promises";
 
 export async function readAllLines(
   path: string,
+  max: number | null,
   cbk: (line: string) => Promise<void>
 ) {
   let lineNumber = 0;
@@ -14,6 +15,9 @@ export async function readAllLines(
       if (lineNumber === printMultiple * 10 && printMultiple < 100000) {
         printMultiple *= 10;
       }
+    }
+    if (max != null) {
+      if (lineNumber >= max) break;
     }
   }
   console.log(`Processed ${lineNumber} lines.`);

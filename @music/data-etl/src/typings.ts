@@ -9,6 +9,9 @@ const dataPath = path.join(__dirname, "../../../data");
 // 20230501-masters.json
 // 20230501-releases.json
 
-const schemaFilePath = path.join(dataPath, "artist.schema.json");
+// const schemaFilePath = path.join(dataPath, "artist.schema.json");
+// const typings = await compileFromFile(schemaFilePath);
+// console.log(typings);
+const schemaFilePath = path.join(dataPath, "master.schema.json");
 const typings = await compileFromFile(schemaFilePath);
 console.log(typings);

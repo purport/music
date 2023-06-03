@@ -1,11 +1,33 @@
 import path from "path";
 import { open } from "node:fs/promises";
 import { fileURLToPath } from "url";
-import { Artist } from "./artist";
+import { Artist as RawArtist } from "./artist";
+import { Master as RawMaster } from "./master";
 import { readAllLines } from "./helpers";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const dataPath = path.join(__dirname, "../../../data");
+
+transform(transformMaster, "20230501-masters.json", "masters.json");
+// transform(transformArtist, "20230501-artists.json", "artists.json");
+
+async function transform<T>(
+  f: (line: string) => T | undefined,
+  fileName: string,
+  outputFileName: string
+) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const dataPath = path.join(__dirname, "../../../data");
+
+  const dataFilePath = path.join(dataPath, fileName);
+  const outputFile = await open(path.join(dataPath, outputFileName), "w");
+  await readAllLines(dataFilePath, null, async (line) => {
+    const artist = f(line);
+    if (artist == null) return;
+    await outputFile.write(JSON.stringify(artist));
+    await outputFile.write("\n");
+  });
+
+  await outputFile.close();
+}
 
 type DataQuality =
   | "Needs Vote"
@@ -15,7 +37,7 @@ type DataQuality =
   | "Needs Minor Changes"
   | "Entirely Incorrect";
 
-type MyArtist = {
+type Artist = {
   id: string;
   quality: DataQuality;
   name: {
@@ -38,11 +60,9 @@ type MyArtist = {
     name: string;
   }[];
 };
-const dataFilePath = path.join(dataPath, "20230501-artists.json");
 
-const outputFile = await open(path.join(dataPath, "artists.json"), "w");
-await readAllLines(dataFilePath, async (line) => {
-  const artist: Artist = JSON.parse(line);
+function transformArtist(line: string): Artist | undefined {
+  const artist: RawArtist = JSON.parse(line);
   if (artist.id == null || artist.name == null) return;
   if (artist.realname == null) artist.realname = null;
 
@@ -74,7 +94,7 @@ await readAllLines(dataFilePath, async (line) => {
     artist.groups.name = [artist.groups.name];
 
   const quality = artist.data_quality as DataQuality;
-  const newArtist: MyArtist = {
+  return {
     id: artist.id,
     quality,
     name: {
@@ -97,12 +117,88 @@ await readAllLines(dataFilePath, async (line) => {
       .filter((g) => g["@id"] != null && g["#text"] != null)
       .map((g) => ({ id: g["@id"]!, name: g["#text"]! })),
   };
+}
 
-  await outputFile.write(JSON.stringify(newArtist));
-  await outputFile.write("\n");
-});
+type Video = {
+  src: string;
+  embed: boolean | null;
+  title: string;
+  description: string;
+  duration: number;
+};
 
-await outputFile.close();
+type Master = {
+  year: number | null;
+  title: string;
+  release: string;
+  notes: string;
+  quality: DataQuality;
+  genres: string[];
+  styles: string[];
+  videos: Video[];
+};
+
+function transformMaster(line: string): Master | undefined {
+  const raw: RawMaster = JSON.parse(line);
+
+  if (
+    raw.year == null ||
+    raw.title == null ||
+    raw.main_release == null ||
+    raw.data_quality == null
+  ) {
+    return;
+  }
+
+  const notes = raw.notes ?? "";
+
+  raw.genres ??= {};
+  raw.genres.genre ??= [];
+  if (!Array.isArray(raw.genres.genre)) raw.genres.genre = [raw.genres.genre];
+  const genres = raw.genres.genre.filter(notEmpty);
+
+  raw.styles ??= {};
+  raw.styles.style ??= [];
+  if (!Array.isArray(raw.styles.style)) raw.styles.style = [raw.styles.style];
+  const styles = raw.styles.style.filter(notEmpty);
+
+  raw.videos ??= {};
+  raw.videos.video ??= [];
+  if (!Array.isArray(raw.videos.video)) raw.videos.video = [raw.videos.video];
+  const videos = raw.videos.video
+    .filter(notEmpty)
+    .filter(
+      (x) =>
+        x["@src"] != null &&
+        x.title != null &&
+        x["@duration"] != null &&
+        !isNaN(parseFloat(x["@duration"]))
+    )
+    .map(
+      (x): Video => ({
+        src: x["@src"] ?? "",
+        embed: x["@embed"] != null ? x["@embed"] == "true" : null,
+        title: x.title ?? "",
+        description: x.description ?? "",
+        duration: parseFloat(x["@duration"] ?? ""),
+      })
+    );
+
+  let year: number | null = parseInt(raw.year);
+  if (isNaN(year) || year == 0) year = null;
+
+  const quality = raw.data_quality as DataQuality;
+  return {
+    year,
+    title: raw.title,
+    release: raw.main_release,
+    quality,
+    notes,
+    genres,
+    styles,
+    videos,
+  };
+}
 
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
