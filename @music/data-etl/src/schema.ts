@@ -11,12 +11,13 @@ const dataPath = path.join(__dirname, "../../../data");
 // 20230501-releases.json
 
 // await getSchema("20230501-artists.json", "artist.schema.json");
-await getSchema("20230501-masters.json", "master.schema.json");
+// await getSchema("20230501-masters.json", "master.schema.json");
+await getSchema("20230501-releases.json", "release.schema.json");
 
 async function getSchema(dataFileName: string, schemaFileName: string) {
   const artistsPath = path.join(dataPath, dataFileName);
   let schema: any;
-  await readAllLines(artistsPath, async (line) => {
+  await readAllLines(artistsPath, null, async (line) => {
     const artist = JSON.parse(line);
     if (schema) {
       mergeTypes([schema, getType(artist)]);

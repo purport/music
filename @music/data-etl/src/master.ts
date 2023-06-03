@@ -1,21 +1,6 @@
+import { ArtistRef } from "./artist-ref";
 import { Image } from "./image";
-
-interface Artist {
-  id?: string;
-  name?: string;
-  anv?: null | string;
-  join?: null;
-  role?: null;
-  tracks?: null;
-}
-
-interface Video {
-  "@src"?: string;
-  "@duration"?: string;
-  "@embed"?: string;
-  title?: string | null;
-  description?: null | string;
-}
+import { Video } from "./video";
 
 export interface Master {
   main_release?: string;
@@ -23,7 +8,7 @@ export interface Master {
     image?: Image | Image[];
   };
   artists?: {
-    artist?: Artist | Artist[];
+    artist?: ArtistRef | ArtistRef[];
   };
   genres?: {
     genre?: string | string[];
@@ -37,5 +22,5 @@ export interface Master {
   videos?: {
     video?: Video | Video[];
   };
-  notes?: string | null;
+  notes?: string;
 }
