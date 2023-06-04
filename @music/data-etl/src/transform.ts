@@ -1,21 +1,20 @@
 import path from "path";
 import { open } from "node:fs/promises";
 import { fileURLToPath } from "url";
-import { Artist as RawArtist } from "./artist";
-import { Master as RawMaster } from "./master";
-import { Release as RawRelease } from "./release";
+import { Artist as RawArtist } from "./generated/artist";
+import { Master as RawMaster } from "./generated/master";
+import { Release as RawRelease } from "./generated/release";
 import { readAllLines } from "./helpers";
+import { DataQuality, Video, Artist, Master, Release } from "./types";
 
+let masterId = 0;
+let releaseId = 0;
 console.log("Masters");
-await transform(transformMaster, "20230501-masters.json", "masters.temp.json");
+await transform(transformMaster, "20230501-masters.json", "masters.json");
 console.log("Artists");
-await transform(transformArtist, "20230501-artists.json", "artists.temp.json");
+await transform(transformArtist, "20230501-artists.json", "artists.json");
 console.log("Releases");
-await transform(
-  transformRelease,
-  "20230501-releases.json",
-  "releases.temp.json"
-);
+await transform(transformRelease, "20230501-releases.json", "releases.json");
 console.log("Done");
 
 async function transform<T>(
@@ -38,38 +37,6 @@ async function transform<T>(
 
   await outputFile.close();
 }
-
-type DataQuality =
-  | "Needs Vote"
-  | "Correct"
-  | "Needs Major Changes"
-  | "Complete and Correct"
-  | "Needs Minor Changes"
-  | "Entirely Incorrect";
-
-type Artist = {
-  id: number;
-  quality: DataQuality;
-  name: {
-    main: string;
-    real: string | null;
-    variations: string[];
-  };
-  profile: string;
-  urls: string[];
-  aliases: {
-    id: number;
-    name: string;
-  }[];
-  groups: {
-    id: number;
-    name: string;
-  }[];
-  members: {
-    id: number;
-    name: string;
-  }[];
-};
 
 function transformArtist(line: string): Artist | undefined {
   const artist: RawArtist = JSON.parse(line);
@@ -141,25 +108,8 @@ function transformArtist(line: string): Artist | undefined {
   };
 }
 
-type Video = {
-  src: string;
-  embed: boolean | null;
-  title: string;
-  description: string;
-  duration: number;
-};
-
-type Master = {
-  year: number | null;
-  title: string;
-  release: number;
-  quality: DataQuality;
-  genres: string[];
-  styles: string[];
-  videos: Video[];
-};
-
 function transformMaster(line: string): Master | undefined {
+  ++masterId;
   const raw: RawMaster = JSON.parse(line);
 
   if (
@@ -210,6 +160,7 @@ function transformMaster(line: string): Master | undefined {
   if (isNaN(year) || year == 0) year = null;
   const quality = raw.data_quality as DataQuality;
   return {
+    id: masterId,
     year,
     title: raw.title,
     release,
@@ -220,31 +171,8 @@ function transformMaster(line: string): Master | undefined {
   };
 }
 
-type Release = {
-  title: string;
-  released: { year: number; month?: number; day?: number };
-  quality: DataQuality;
-  master: number;
-  main: boolean;
-  formats: { name: string; descriptions: string[] }[];
-  artists: {
-    id: number;
-    name: string;
-    role?: string;
-  }[];
-  tracks: {
-    position: string | null;
-    title: string;
-    duration: number | null;
-    artists: {
-      id: number;
-      name: string;
-      role?: string;
-    }[];
-  }[];
-};
-
 function transformRelease(line: string): Release | undefined {
+  ++releaseId;
   const raw: RawRelease = JSON.parse(line);
 
   if (
@@ -319,6 +247,7 @@ function transformRelease(line: string): Release | undefined {
 
   const quality = raw.data_quality as DataQuality;
   return {
+    id: releaseId,
     master,
     main,
     title: raw.title,
