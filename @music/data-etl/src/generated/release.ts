@@ -14,6 +14,7 @@ export interface Release {
           "@uri150"?: string;
           "@width"?: string;
           "@height"?: string;
+          [k: string]: unknown;
         }
       | {
           "@type"?: string;
@@ -21,7 +22,9 @@ export interface Release {
           "@uri150"?: string;
           "@width"?: string;
           "@height"?: string;
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   artists?: {
     artist?:
@@ -32,6 +35,7 @@ export interface Release {
           join?: null;
           role?: null;
           tracks?: null;
+          [k: string]: unknown;
         }
       | {
           id?: string;
@@ -40,7 +44,9 @@ export interface Release {
           join?: string | null;
           role?: null;
           tracks?: null;
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   title?: string;
   labels?: null | {
@@ -49,22 +55,26 @@ export interface Release {
           "@name"?: string;
           "@catno"?: string;
           "@id"?: string;
+          [k: string]: unknown;
         }
       | {
           "@name"?: string;
           "@catno"?: string;
           "@id"?: string;
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   extraartists?: null | {
     artist?:
       | {
           id?: string;
-          name?: string | null;
+          name?: string;
           anv?: null | string;
           join?: null;
           role?: string;
           tracks?: null | string;
+          [k: string]: unknown;
         }
       | {
           id?: string;
@@ -73,7 +83,9 @@ export interface Release {
           join?: null;
           role?: string;
           tracks?: null | string;
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   formats?: {
     format?:
@@ -83,22 +95,36 @@ export interface Release {
           "@text"?: string;
           descriptions?: {
             description?: string | string[];
+            [k: string]: unknown;
           };
+          [k: string]: unknown;
         }
       | {
           "@name"?: string;
           "@qty"?: string;
           "@text"?: string;
           descriptions?: {
-            description?: (string | {}) | string[];
+            description?:
+              | (
+                  | string
+                  | {
+                      [k: string]: unknown;
+                    }
+                )
+              | string[];
+            [k: string]: unknown;
           };
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   genres?: {
     genre?: string | string[];
+    [k: string]: unknown;
   };
   styles?: {
     style?: string | string[];
+    [k: string]: unknown;
   };
   country?: string;
   released?: string | null;
@@ -107,6 +133,7 @@ export interface Release {
   master_id?: {
     "@is_main_release"?: string;
     "#text"?: string;
+    [k: string]: unknown;
   };
   tracklist?: null | {
     track?:
@@ -121,24 +148,18 @@ export interface Release {
                   title?: string;
                   duration?: null | string;
                   extraartists?: {
-                    artist?:
-                      | {
-                          id?: string;
-                          name?: string;
-                          anv?: string | null;
-                          join?: null;
-                          role?: string;
-                          tracks?: null;
-                        }
-                      | {
-                          id?: string;
-                          name?: string;
-                          anv?: null | string;
-                          join?: null;
-                          role?: string;
-                          tracks?: null;
-                        }[];
+                    artist?: {
+                      id?: string;
+                      name?: string;
+                      anv?: string;
+                      join?: null;
+                      role?: string;
+                      tracks?: null;
+                      [k: string]: unknown;
+                    };
+                    [k: string]: unknown;
                   };
+                  [k: string]: unknown;
                 }
               | {
                   position?: string;
@@ -154,6 +175,7 @@ export interface Release {
                           join?: null;
                           role?: string;
                           tracks?: null;
+                          [k: string]: unknown;
                         }
                       | {
                           id?: string;
@@ -162,7 +184,9 @@ export interface Release {
                           join?: null;
                           role?: string;
                           tracks?: null;
+                          [k: string]: unknown;
                         }[];
+                    [k: string]: unknown;
                   };
                   artists?: {
                     artist?:
@@ -174,6 +198,7 @@ export interface Release {
                           join?: null;
                           role?: null;
                           tracks?: null;
+                          [k: string]: unknown;
                         }
                       | {
                           id?: string;
@@ -182,9 +207,13 @@ export interface Release {
                           join?: string | null;
                           role?: null;
                           tracks?: null;
+                          [k: string]: unknown;
                         }[];
+                    [k: string]: unknown;
                   };
+                  [k: string]: unknown;
                 }[];
+            [k: string]: unknown;
           };
           extraartists?: {
             artist?:
@@ -195,6 +224,7 @@ export interface Release {
                   join?: null;
                   role?: string;
                   tracks?: null;
+                  [k: string]: unknown;
                 }
               | {
                   id?: string;
@@ -203,7 +233,9 @@ export interface Release {
                   join?: null;
                   role?: string;
                   tracks?: null;
+                  [k: string]: unknown;
                 }[];
+            [k: string]: unknown;
           };
           artists?: {
             artist?:
@@ -214,6 +246,7 @@ export interface Release {
                   join?: null;
                   role?: null;
                   tracks?: null;
+                  [k: string]: unknown;
                 }
               | {
                   id?: string;
@@ -222,8 +255,11 @@ export interface Release {
                   join?: string | null;
                   role?: null;
                   tracks?: null;
+                  [k: string]: unknown;
                 }[];
+            [k: string]: unknown;
           };
+          [k: string]: unknown;
         }
       | {
           position?: string | null;
@@ -239,6 +275,7 @@ export interface Release {
                   join?: null;
                   role?: null;
                   tracks?: null;
+                  [k: string]: unknown;
                 }
               | {
                   id?: string;
@@ -247,7 +284,9 @@ export interface Release {
                   join?: string | null;
                   role?: null;
                   tracks?: null;
+                  [k: string]: unknown;
                 }[];
+            [k: string]: unknown;
           };
           extraartists?: {
             artist?:
@@ -259,6 +298,7 @@ export interface Release {
                   join?: null;
                   role?: string;
                   tracks?: null | string;
+                  [k: string]: unknown;
                 }
               | {
                   id?: string;
@@ -267,7 +307,9 @@ export interface Release {
                   join?: null;
                   role?: string;
                   tracks?: null | string;
+                  [k: string]: unknown;
                 }[];
+            [k: string]: unknown;
           };
           sub_tracks?: {
             track?:
@@ -286,6 +328,7 @@ export interface Release {
                           join?: null;
                           role?: null;
                           tracks?: null;
+                          [k: string]: unknown;
                         }
                       | {
                           id?: string;
@@ -294,7 +337,9 @@ export interface Release {
                           join?: string | null;
                           role?: null;
                           tracks?: null;
+                          [k: string]: unknown;
                         }[];
+                    [k: string]: unknown;
                   };
                   extraartists?: {
                     artist?:
@@ -306,6 +351,7 @@ export interface Release {
                           join?: null;
                           role?: string;
                           tracks?: null;
+                          [k: string]: unknown;
                         }
                       | {
                           id?: string;
@@ -314,8 +360,11 @@ export interface Release {
                           join?: null;
                           role?: string;
                           tracks?: null;
+                          [k: string]: unknown;
                         }[];
+                    [k: string]: unknown;
                   };
+                  [k: string]: unknown;
                 }
               | {
                   position?: string | null;
@@ -331,6 +380,7 @@ export interface Release {
                           join?: null;
                           role?: string;
                           tracks?: null;
+                          [k: string]: unknown;
                         }
                       | {
                           id?: string;
@@ -339,7 +389,9 @@ export interface Release {
                           join?: null;
                           role?: string;
                           tracks?: null;
+                          [k: string]: unknown;
                         }[];
+                    [k: string]: unknown;
                   };
                   artists?: {
                     artist?:
@@ -351,6 +403,7 @@ export interface Release {
                           join?: null;
                           role?: null;
                           tracks?: null;
+                          [k: string]: unknown;
                         }
                       | {
                           id?: string;
@@ -359,11 +412,17 @@ export interface Release {
                           join?: string | null;
                           role?: null;
                           tracks?: null;
+                          [k: string]: unknown;
                         }[];
+                    [k: string]: unknown;
                   };
+                  [k: string]: unknown;
                 }[];
+            [k: string]: unknown;
           };
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   identifiers?: null | {
     identifier?:
@@ -371,12 +430,15 @@ export interface Release {
           "@type"?: string;
           "@description"?: string;
           "@value"?: string;
+          [k: string]: unknown;
         }
       | {
           "@type"?: string;
           "@description"?: string;
           "@value"?: string;
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   videos?: {
     video?:
@@ -386,6 +448,7 @@ export interface Release {
           "@embed"?: string;
           title?: string | null;
           description?: string | null;
+          [k: string]: unknown;
         }
       | {
           "@src"?: string;
@@ -393,7 +456,9 @@ export interface Release {
           "@embed"?: string;
           title?: string | null;
           description?: string | null;
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
   companies?: null | {
     company?:
@@ -404,6 +469,7 @@ export interface Release {
           entity_type?: string;
           entity_type_name?: string;
           resource_url?: string;
+          [k: string]: unknown;
         }
       | {
           id?: string;
@@ -412,6 +478,9 @@ export interface Release {
           entity_type?: string;
           entity_type_name?: string;
           resource_url?: string | null;
+          [k: string]: unknown;
         }[];
+    [k: string]: unknown;
   };
+  [k: string]: unknown;
 }

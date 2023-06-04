@@ -6,16 +6,17 @@ import { Master as RawMaster } from "./master";
 import { Release as RawRelease } from "./release";
 import { readAllLines } from "./helpers";
 
-// console.log("Masters");
-// await transform(transformMaster, "20230501-masters.json", "masters.json");
-// console.log("");
-// console.log("");
+console.log("Masters");
+await transform(transformMaster, "20230501-masters.json", "masters.temp.json");
 console.log("Artists");
-await transform(transformArtist, "20230501-artists.json", "artists.json");
-console.log("");
-console.log("");
+await transform(transformArtist, "20230501-artists.json", "artists.temp.json");
 console.log("Releases");
-await transform(transformRelease, "20230501-releases.json", "releases.json");
+await transform(
+  transformRelease,
+  "20230501-releases.json",
+  "releases.temp.json"
+);
+console.log("Done");
 
 async function transform<T>(
   f: (line: string) => T | undefined,
@@ -189,14 +190,14 @@ function transformMaster(line: string): Master | undefined {
   const videos = raw.videos.video
     .filter(notEmpty)
     .filter(
-      (x) =>
+      (x: any) =>
         x["@src"] != null &&
         x.title != null &&
         x["@duration"] != null &&
         !isNaN(parseFloat(x["@duration"]))
     )
     .map(
-      (x): Video => ({
+      (x: any): Video => ({
         src: x["@src"] ?? "",
         embed: x["@embed"] != null ? x["@embed"] == "true" : null,
         title: x.title ?? "",
@@ -224,15 +225,17 @@ type Release = {
   released: { year: number; month?: number; day?: number };
   quality: DataQuality;
   master: number;
+  main: boolean;
+  formats: { name: string; descriptions: string[] }[];
   artists: {
     id: number;
     name: string;
     role?: string;
   }[];
   tracks: {
-    position: string;
+    position: string | null;
     title: string;
-    duration: number;
+    duration: number | null;
     artists: {
       id: number;
       name: string;
@@ -253,43 +256,33 @@ function transformRelease(line: string): Release | undefined {
   ) {
     return;
   }
-  const master =
-    raw.master_id["@is_main_release"] === "true"
-      ? parseInt(raw.master_id["#text"] ?? "")
-      : null;
+  const master = parseInt(raw.master_id["#text"] ?? "");
+  const main = raw.master_id["@is_main_release"] == "true";
   if (master == null || isNaN(master)) return;
 
   raw.tracklist.track ??= [];
   if (!Array.isArray(raw.tracklist.track))
     raw.tracklist.track = [raw.tracklist.track];
 
-  const validTracks = raw.tracklist.track.filter(
-    (t) => t.position != null && t.title != null && t.duration != null
-  );
-  if (
-    validTracks.length !== raw.tracklist.track.length ||
-    raw.tracklist.track.length === 0
-  )
-    return;
+  const validTracks = raw.tracklist.track;
 
-  let hasInvalidTrack = false;
   const tracks = validTracks.map((x) => {
     const durationSplits = (x.duration ?? "").split(":");
-    let duration = NaN;
+    let duration: number | null = NaN;
     if (durationSplits.length == 2) {
       duration = parseInt(durationSplits[0]) * 60 + parseInt(durationSplits[1]);
     }
 
-    if (isNaN(duration)) hasInvalidTrack = true;
+    if (isNaN(duration)) {
+      duration = null;
+    }
     return {
-      position: x.position!,
-      title: x.title!,
-      duration: duration,
+      position: x.position ?? null,
+      title: x.title ?? "",
+      duration: duration ?? null,
       artists: getArtists(x),
     };
   });
-
-  if (hasInvalidTrack) return;
 
   let released = raw.released.split("-");
   if (released.length > 3) return;
@@ -306,12 +299,31 @@ function transformRelease(line: string): Release | undefined {
   }
   if (isNaN(date.year) || isNaN(date.month ?? 0) || isNaN(date.day ?? 0))
     return;
+  raw.formats ??= {};
+  raw.formats.format ??= [];
+  if (!Array.isArray(raw.formats.format))
+    raw.formats.format = [raw.formats.format];
+
+  const formats = raw.formats.format
+    .filter((x) => x["@name"] != null)
+    .map((x) => {
+      let des: string[] | string | undefined = (x.descriptions ?? {})
+        .description as any;
+      if (des == null) des = [];
+      if (!Array.isArray(des)) des = [des];
+      return {
+        name: x["@name"] ?? "",
+        descriptions: des.filter(notEmpty),
+      };
+    });
 
   const quality = raw.data_quality as DataQuality;
   return {
     master,
+    main,
     title: raw.title,
     released: date,
+    formats,
     artists: getArtists(raw),
     tracks,
     quality,

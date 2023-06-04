@@ -2,22 +2,42 @@ import path from "path";
 import { writeFile } from "node:fs/promises";
 import { fileURLToPath } from "url";
 import { readAllLines } from "./helpers";
+import { compileFromFile } from "json-schema-to-typescript";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const dataPath = path.join(__dirname, "../../../data");
+const outputPath = path.join(__dirname, "generated");
 
-// 20230501-labels.json
-// 20230501-masters.json
-// 20230501-releases.json
+await getSchema(
+  100000,
+  "20230501-masters.json",
+  "master.schema.json",
+  "master.ts"
+);
 
-// await getSchema("20230501-artists.json", "artist.schema.json");
-// await getSchema("20230501-masters.json", "master.schema.json");
-await getSchema("20230501-releases.json", "release.schema.json");
+await getSchema(
+  null,
+  "20230501-artists.json",
+  "artist.schema.json",
+  "artist.ts"
+);
 
-async function getSchema(dataFileName: string, schemaFileName: string) {
+await getSchema(
+  null,
+  "20230501-releases.json",
+  "release.schema.json",
+  "release.ts"
+);
+
+async function getSchema(
+  maxLines: number | null,
+  dataFileName: string,
+  schemaFileName: string,
+  typesFileName: string
+) {
   const artistsPath = path.join(dataPath, dataFileName);
   let schema: any;
-  await readAllLines(artistsPath, null, async (line) => {
+  await readAllLines(artistsPath, maxLines, async (line) => {
     const artist = JSON.parse(line);
     if (schema) {
       mergeTypes([schema, getType(artist)]);
@@ -26,7 +46,12 @@ async function getSchema(dataFileName: string, schemaFileName: string) {
     }
   });
   convertToJsonSchema(schema);
-  await writeFile(path.join(dataPath, schemaFileName), JSON.stringify(schema));
+  await writeFile(
+    path.join(outputPath, schemaFileName),
+    JSON.stringify(schema)
+  );
+  const types = await compileFromFile(path.join(outputPath, schemaFileName));
+  await writeFile(path.join(outputPath, typesFileName), types);
 }
 
 function getType(object: any) {

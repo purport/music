@@ -5,10 +5,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const dataPath = path.join(__dirname, "../../../data");
 
-// 20230501-labels.json
-// 20230501-masters.json
-// 20230501-releases.json
-
 const dataFilePath = path.join(dataPath, "20230501-artists.json");
 const dataFile = await open(dataFilePath);
 const schemaFilePath = path.join(dataPath, "artists.schema.json");
