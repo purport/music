@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A music app",
   "scripts": {
-    "dev": "pnpm --parallel --stream -r /^dev:.*/"
+    "dev": "pnpm --parallel --stream -r /^dev:.*/",
+    "build": "pnpm --parallel --stream -r /^build/"
   },
   "author": "David Welch",
   "license": "ISC"

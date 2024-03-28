@@ -359,12 +359,12 @@ fn parse_master(
                             Event::Text(t) => {
                                 let unescape = &t.unescape().unwrap();
                                 genre.push(str::from_utf8(unescape.as_bytes()).unwrap().to_owned());
+                                reader
+                                    .read_to_end_into(e.to_end().name(), &mut buf5)
+                                    .expect("unclosed tag");
                             }
                             e => todo!("{:?}", e),
                         }
-                        reader
-                            .read_to_end_into(e.to_end().name(), &mut buf5)
-                            .expect("unclosed tag");
                     }
                     Event::End(e) if e.name().as_ref() == b"genres" => break,
                     e => todo!("{:?}", e),
@@ -377,12 +377,12 @@ fn parse_master(
                             Event::Text(t) => {
                                 let unescape = &t.unescape().unwrap();
                                 style.push(str::from_utf8(unescape.as_bytes()).unwrap().to_owned());
+                                reader
+                                    .read_to_end_into(e.to_end().name(), &mut buf4)
+                                    .expect("unclosed tag");
                             }
                             e => todo!("{:?}", e),
                         }
-                        reader
-                            .read_to_end_into(e.to_end().name(), &mut buf4)
-                            .expect("unclosed tag");
                     }
                     Event::End(e) if e.name().as_ref() == b"styles" => break,
                     e => todo!("{:?}", e),
